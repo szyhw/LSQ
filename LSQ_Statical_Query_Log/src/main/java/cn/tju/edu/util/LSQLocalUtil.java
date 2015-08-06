@@ -9,6 +9,7 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
+import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
@@ -17,6 +18,7 @@ import org.openrdf.rio.RDFParseException;
 import org.openrdf.sail.nativerdf.NativeStore;
 
 public class LSQLocalUtil {
+	
 	public void CountTriplePattern(String path) {
 		File dataDir = new File(path);
 		SailRepository repository = new SailRepository(new NativeStore(dataDir));
@@ -61,4 +63,22 @@ public class LSQLocalUtil {
 		}
 		
 	}
+	
+//	public void addDataFile(String dataPath) {
+//		
+//	}
+//	
+//	public Repository getRepository(String dataDirPath) {
+//		File dataDir = new File(dataDirPath);
+//		SailRepository repository = new SailRepository(new NativeStore(dataDir));
+//		
+//		try {
+//			repository.initialize();
+//		} catch (RepositoryException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		return repository;
+//	}
 }
