@@ -19,7 +19,7 @@ public class LSQLocalUtilTest {
 
 	@Test
 	public void test() {
-		lsq.CountTriplePattern("E:\\LSQ");
+		lsq.CountTriplePattern("/home/hxw/SesameStorage");
 	}
 
 }

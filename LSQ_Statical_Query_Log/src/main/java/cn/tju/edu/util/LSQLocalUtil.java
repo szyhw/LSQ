@@ -26,7 +26,7 @@ public class LSQLocalUtil {
 		TupleQuery tupleQuery = null;
 		TupleQueryResult tupleQueryResult = null;
 		
-		File dataFile = new File("E:\\LSQ-BM.ttl");
+		File dataFile = new File("Data/LSQ-DBpedia355.ttl");
 		String queryString = "PREFIX lsqv:<http://lsq.aksw.org/vocab#> SELECT (COUNT(?id) AS ?count) WHERE {  ?id lsqv:endpoint ?ep }";
 		
 		try {
