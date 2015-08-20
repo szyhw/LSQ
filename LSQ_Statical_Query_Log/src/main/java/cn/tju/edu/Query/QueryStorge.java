@@ -37,36 +37,41 @@ public class QueryStorge {
 		}
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 		
+		System.out.println("begin output...");
+		
 		try {
 			while(result.hasNext()) {
 				BindingSet bs = result.next();
 				
-				try {
+				
 					for(String bindingName : bs.getBindingNames()) {
 						bufferedWriter.write(bs.getBinding(bindingName).toString() + "\n");
 					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} finally {
-					try {
-						bufferedWriter.flush();
-						bufferedWriter.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
 			}
 		} catch (QueryEvaluationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  finally {
+			try {
+				bufferedWriter.flush();
+				bufferedWriter.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		System.out.println("output ending...");
 		
 		return true;
 	}
 	
 	public void QueryToFile(String queryString, String resultFile) {
+		System.out.println("begin query...");
+		
 		try {
 			query = connection.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
 			try {
@@ -82,6 +87,8 @@ public class QueryStorge {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println("end query...");
 		
 		printResultToFile(resultFile);
 	}
