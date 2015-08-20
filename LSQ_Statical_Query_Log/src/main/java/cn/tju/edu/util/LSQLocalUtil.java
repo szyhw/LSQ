@@ -26,7 +26,7 @@ public class LSQLocalUtil {
 		TupleQuery tupleQuery = null;
 		TupleQueryResult tupleQueryResult = null;
 		
-		File dataFile = new File("Data/LSQ-DBpedia355.ttl");
+		File dataFile = new File("Data/LSQ-DBpedia-Seasame.ttl");
 		String queryString = "PREFIX lsqv:<http://lsq.aksw.org/vocab#> SELECT (COUNT(?id) AS ?count) WHERE {  ?id lsqv:endpoint ?ep }";
 		
 		try {
@@ -62,22 +62,4 @@ public class LSQLocalUtil {
 		}
 		
 	}
-	
-//	public void addDataFile(String dataPath) {
-//		
-//	}
-//	
-//	public Repository getRepository(String dataDirPath) {
-//		File dataDir = new File(dataDirPath);
-//		SailRepository repository = new SailRepository(new NativeStore(dataDir));
-//		
-//		try {
-//			repository.initialize();
-//		} catch (RepositoryException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		return repository;
-//	}
 }
