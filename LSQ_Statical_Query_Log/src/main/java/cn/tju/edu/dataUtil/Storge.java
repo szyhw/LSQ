@@ -34,6 +34,8 @@ public class Storge {
 	}
 	
 	public boolean StorgeRDFFromFile(String RDFFilePath) {
+		System.out.println("begin storge from file " + RDFFilePath + " ......");
+		
 		File RDFDataFile = new File(RDFFilePath);
 		
 		try {
@@ -48,6 +50,8 @@ public class Storge {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println("storge end from" + RDFFilePath + "......");
 		
 		return true;
 	}

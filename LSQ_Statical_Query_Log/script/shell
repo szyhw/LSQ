@@ -1,0 +1,5 @@
+sed 's/lsqr:x-const-http:\/\/xmlns.com\/foaf\/0.1\/member-uri-0/lsqr:x-const-http-xmlns.com-foaf-0.1-member-uri-0/g' LSQ-SWDF-Seasame.ttl >> LSQ-SWDF-Seasame1.ttl
+sed 's/lsqr:-anon/lsqr:_anon/g' sourceFile destFile
+
+// extracted the number from result
+sed -n 's/^[^\"]*\"//; s/\".*$//p' TriplePatternsStatistical-BM >> TriplePatternsStatistical-BM-num
