@@ -45,8 +45,10 @@ public class QueryStorge {
 				
 				
 					for(String bindingName : bs.getBindingNames()) {
-						bufferedWriter.write(bs.getBinding(bindingName).toString() + "\n");
+						bufferedWriter.write(bs.getBinding(bindingName).toString() + " ");
 					}
+					
+					bufferedWriter.write("\n");
 			}
 		} catch (QueryEvaluationException e) {
 			// TODO Auto-generated catch block

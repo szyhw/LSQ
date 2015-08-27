@@ -7,7 +7,9 @@ public class StaticalUtilTest {
 
 	@Test
 	public void test() {
-		StaticalUtil.statical("/home/hanxingwang/Data/SearchResult/TriplePatternsStatistical-SWDF-num", "/home/hanxingwang/Data/SearchResult/TriplePatternsStatistical-SWDF-Result");
+//		StaticalUtil.statical("/home/hanxingwang/Data/SearchResult/TriplePatternsStatistical-SWDF-num", "/home/hanxingwang/Data/SearchResult/TriplePatternsStatistical-SWDF-Result");
+		StaticalUtil.staticalFeature("/home/hxw/Data/SearchResult/QueryWithFeaturesMap", "/home/hxw/Data/SearchResult/FeaturesMap");
+//		StaticalUtil.CountFeature("/home/hxw/Data/SearchResult/FeaturesMap", "/home/hxw/Data/SearchResult/FeaturesStatical");
 	}
 
 }

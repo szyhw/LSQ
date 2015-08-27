@@ -9,10 +9,10 @@ import cn.tju.edu.dataUtil.Storge;
 
 @FixMethodOrder(MethodSorters.DEFAULT)
 public class StorgeAndQueryTest {
-	private static Storge storge = new Storge("/home/hanxingwang/Database/SesameStorage");
+	private static Storge storge = new Storge("/home/hxw/Database/SesameStorage");
 	private static QueryStorge query = new QueryStorge(storge.getConnection());
 	
-	@Test
+//	@Test
 	public void a_testStorge() {
 		storge.StorgeRDFFromFile("/home/hanxingwang/Data/LSQ/LSQ-DBpedia-Seasame.ttl");
 		storge.StorgeRDFFromFile("/home/hanxingwang/Data/LSQ/LSQ-BM-Seasame.ttl");
@@ -20,7 +20,7 @@ public class StorgeAndQueryTest {
 		storge.StorgeRDFFromFile("/home/hanxingwang/Data/LSQ/LSQ-SWDF-Seasame.ttl");
 	}
 	
-	@Test
+//	@Test
 	public void b_testQuery() {
 		String queryString1 = "PREFIX lsqv:<http://lsq.aksw.org/vocab#> SELECT (COUNT(?id) AS ?count) WHERE {  ?id lsqv:endpoint ?ep }";
 		String queryString2 = "PREFIX lsqv:<http://lsq.aksw.org/vocab#> SELECT (COUNT(?id) AS ?count) WHERE {  ?id lsqv:triplePatterns ?triplePatterns }";
@@ -29,6 +29,13 @@ public class StorgeAndQueryTest {
 		query.QueryToFile(queryString1, "/home/hanxingwang/Data/SearchResult/TotalCount");
 		query.QueryToFile(queryString2, "/home/hanxingwang/Data/SearchResult/TriplePatternsCount");
 		query.QueryToFile(queryString3, "/home/hanxingwang/Data/SearchResult/TriplePatternsStatistical");
+	}
+	
+	@Test
+	public void c_testQueryFeatures() {
+		String queryString = "PREFIX lsqv:<http://lsq.aksw.org/vocab#> SELECT (COUNT(?id) AS ?count) WHERE {  ?id lsqv:usesFeature ?feature FILTER (?feature IN ( lsqv:Optional )) }";
+		
+		query.QueryToFile(queryString, "/home/hxw/Data/SearchResult/OptionalFeature");
 	}
 
 }
