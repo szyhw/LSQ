@@ -1,9 +1,7 @@
 package cn.tju.edu.dataUtil;
 
-import java.awt.List;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,23 +107,85 @@ public class WelldesignUtil {
 		return start;
 	}
 	
+	private static ArrayList<String> getVariable(String string) {
+		char tempChar;
+		int i = 0, length = string.length();
+		boolean flag = false;
+		StringBuffer sb = new StringBuffer("");
+		ArrayList<String> variablesList = new ArrayList<String>();
+		for(i=0; i<length; i++) {
+			tempChar = string.charAt(i);
+			if(!flag) {
+				if(tempChar == '?') {
+					flag = true;
+					sb = new StringBuffer("");
+				}
+			} else {				
+				if((tempChar>='a' && tempChar<='z') || (tempChar>='A' && tempChar<='Z') || (tempChar>='0' && tempChar<='9') || tempChar=='_')
+					sb.append(tempChar);
+				else {
+					flag = false;
+					variablesList.add(new String(sb));
+				}
+				
+			}
+		}
+		
+		return variablesList;
+	}
+	
 	private static boolean isSafe(String bagPattern, ArrayList<Integer> optionalList) {
 		Pattern filterPattern = null;
 		Matcher filterMatcher = null;
 		
-		filterPattern = Pattern.compile("FILTER.*\\(");
+		filterPattern = Pattern.compile("FILTER[^\\(]*\\(");
 		filterMatcher = filterPattern.matcher(bagPattern);
 		
-		int position;
+		int start, end, position = 0;
+		boolean flag = true;
+		Iterator<Integer> iterator = null;
 		ArrayList<Integer> filterList = new ArrayList<Integer>();
-		while (filterMatcher.find()) {
+		while (filterMatcher.find(position)) {
 			position = filterMatcher.end()-1;
+			
+			iterator = optionalList.iterator();
+			while (iterator.hasNext()) {
+				start = iterator.next();
+				end = iterator.next();
+				
+				if(position > start && position < end) {
+					flag = false;
+				}
+			}
+			
+			if (flag) {
+				filterList.add(position);
+				position = findTheLittleBraceEnd(bagPattern, position);
+				filterList.add(position);
+			}
+		}
+		
+		iterator = filterList.iterator();
+		ArrayList<String> filterVariablesList = null;
+		ArrayList<String> outFilterVariablesList = null;
+		while (iterator.hasNext()) {
+			filterVariablesList = new ArrayList<String>();
+			outFilterVariablesList = new ArrayList<String>();
+			
+			start = iterator.next();
+			end = iterator.next();
+			
+			filterVariablesList.addAll(getVariable(bagPattern.substring(start, end)));
+			outFilterVariablesList.addAll(getVariable(bagPattern.substring(0, start)));
+			
+			if(!outFilterVariablesList.containsAll(filterVariablesList))
+				return false;
 		}
 		
 		return true;
 	}
 	
-	private static boolean isInnerOptionalWellDesigned(String bagPattern, String wholeWhereClause) {
+	private static boolean isInnerOptionalWellDesigned(String bagPattern, String wholeWhereClause) throws Exception {
 		Pattern innerOptionalPattern = null;
 		Matcher innerOptionalMatcher = null;
 		
@@ -135,7 +195,7 @@ public class WelldesignUtil {
 		int position = 0;
 		ArrayList<Integer> optionalList = new ArrayList<Integer>();
 		while (innerOptionalMatcher.find(position)) {
-			position = innerOptionalMatcher.end()-1;			
+			position = innerOptionalMatcher.end()-1;
 			optionalList.add(position);
 			position = findTheBraceEnd(bagPattern, position);
 			optionalList.add(position);			
@@ -144,10 +204,51 @@ public class WelldesignUtil {
 		if(!isSafe(bagPattern, optionalList))
 			return false;
 		
+		int start, end;
+		Iterator<Integer> iterator = null;
+		iterator = optionalList.iterator();
+		while (iterator.hasNext()) {
+			start = iterator.next();
+			end = iterator.next();
+
+			if (!travelBGP(bagPattern.substring(start, end), wholeWhereClause))
+				return false;
+
+			// process P = Q OPT R
+			String Pstring, Qstring, Rstring, outString;
+
+			Pstring = bagPattern.substring(0, end);
+			Qstring = bagPattern.substring(0, start);
+			Rstring = bagPattern.substring(start, end);
+
+			int before = wholeWhereClause.indexOf(Pstring);
+			int after = before + Pstring.length();
+
+			outString = wholeWhereClause.substring(0, before) + wholeWhereClause.substring(after);
+
+			ArrayList<String> insideRVariables = new ArrayList<String>();
+			ArrayList<String> outsideVariables = new ArrayList<String>();
+			ArrayList<String> insideQVariables = new ArrayList<String>();
+
+			insideRVariables = getVariable(Rstring);
+			outsideVariables = getVariable(outString);
+			insideQVariables = getVariable(Qstring);
+
+			String tempString = null;
+			Iterator<String> iteratorString = null;
+			iteratorString = insideRVariables.iterator();
+			while(iteratorString.hasNext()) {
+				tempString = iteratorString.next();
+				if(outsideVariables.contains(tempString))
+					if(!insideQVariables.contains(tempString))
+						return false;
+			}
+		}
+
 		return true;
 	}
 	
-	private static boolean isOuterOptionalWellDesigned(String bagPattern, String wholeWhereClause) {
+	private static boolean isOuterOptionalWellDesigned(String bagPattern, String wholeWhereClause) throws Exception {
 		int oneBgpEnd = findTheBraceEnd(bagPattern, 0);
 		
 		if(!isInnerOptionalWellDesigned(bagPattern.substring(0, oneBgpEnd), wholeWhereClause))
@@ -158,41 +259,48 @@ public class WelldesignUtil {
 		
 		outerOptionalPattern = Pattern.compile("\\} *OPTIONAL *\\{");
 		outerOptionalMatcher = outerOptionalPattern.matcher(bagPattern);
-		
-		int start, end;
-		boolean isOptionalWellDesigned = true;
-		while (outerOptionalMatcher.find()) {
-			
-		}
-		
-//		int groupCount = outerOptionalMatcher.groupCount();
 
-//		if(groupCount == 0) {
-//			return isSafe(bagPattern);
-//		} else {
-//			int i, endPrePattern, startOptionalPattern, endOptionalPattern;
-//			
-//			for(i=0; i<groupCount; i++) {
-//				if(optionalMatcher.find(i)) {
-//					endPrePattern = optionalMatcher.start();
-//					
-//					if(!isSafe(bagPattern.substring(0, endPrePattern)))
-//						return false;
-//					
-//					startOptionalPattern = optionalMatcher.end()-1;
-//					endOptionalPattern = findTheBraceEnd(bagPattern, startOptionalPattern);
-//					if(!isSafe(bagPattern.substring(startOptionalPattern, endOptionalPattern)))
-//							return false;
-//				} else {
-//					try {
-//						throw new Exception("Error in the count number of the optional. bagPattern: " + bagPattern + " the whole where clause:" + wholeWhereClause);
-//					} catch (Exception e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		}
+
+		String Pstring, Qstring, Rstring, outString;
+
+		ArrayList<String> insideRVariables = new ArrayList<String>();
+		ArrayList<String> outsideVariables = new ArrayList<String>();
+		ArrayList<String> insideQVariables = new ArrayList<String>();	
+
+		int start, end;
+		int position = 0;
+		while (outerOptionalMatcher.find(position)) {
+			start = outerOptionalMatcher.end() - 1;
+			end = findTheBraceEnd(bagPattern, start);
+			
+			position = end-1;
+			
+			if(!travelBGP(bagPattern.substring(start, end), wholeWhereClause))
+				return false;
+			
+			Pstring = bagPattern.substring(0, end);
+			Qstring = bagPattern.substring(0, start);
+			Rstring = bagPattern.substring(start, end);
+			
+			int before = wholeWhereClause.indexOf(Pstring);
+			int after = before + Pstring.length();
+			
+			outString = wholeWhereClause.substring(0, before) + wholeWhereClause.substring(after);
+			
+			insideRVariables = getVariable(Rstring);
+			outsideVariables = getVariable(outString);
+			insideQVariables = getVariable(Qstring);
+
+			String tempString = null;
+			Iterator<String> iteratorString = null;
+			iteratorString = insideRVariables.iterator();
+			while(iteratorString.hasNext()) {
+				tempString = iteratorString.next();
+				if(outsideVariables.contains(tempString))
+					if(!insideQVariables.contains(tempString))
+						return false;
+			}
+		}
 
 		return true;
 	}
