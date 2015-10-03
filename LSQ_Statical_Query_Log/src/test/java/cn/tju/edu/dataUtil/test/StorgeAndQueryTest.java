@@ -9,7 +9,7 @@ import cn.tju.edu.dataUtil.Storge;
 
 @FixMethodOrder(MethodSorters.DEFAULT)
 public class StorgeAndQueryTest {
-	private static Storge storge = new Storge("/home/hxw/Database/SesameStorage");
+	private static Storge storge = new Storge("/home/hanxingwang/Data/SesameStorage");
 	private static QueryStorge query = new QueryStorge(storge.getConnection());
 	
 //	@Test
@@ -33,9 +33,9 @@ public class StorgeAndQueryTest {
 	
 	@Test
 	public void c_testQueryFeatures() {
-		String queryString = "PREFIX lsqv:<http://lsq.aksw.org/vocab#> SELECT (COUNT(?id) AS ?count) WHERE {  ?id lsqv:usesFeature ?feature FILTER (?feature IN ( lsqv:Optional )) }";
+		String queryString = "PREFIX lsqv:<http://lsq.aksw.org/vocab#> PREFIX sp:<http://spinrdf.org/sp#> SELECT ?text WHERE {  ?id lsqv:usesFeature lsqv:SubQuery. ?id lsqv:usesFeature lsqv:Optional . ?id lsqv:usesFeature lsqv:Union . ?id sp:text ?text  }";
 		
-		query.QueryToFile(queryString, "/home/hxw/Data/SearchResult/OptionalFeature");
+		query.QueryToFile(queryString, "/home/hanxingwang/Data/SearchResult/UnionAndSubQuery");
 	}
 
 }

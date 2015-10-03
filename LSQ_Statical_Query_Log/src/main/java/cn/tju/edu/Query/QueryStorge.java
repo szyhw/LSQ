@@ -40,15 +40,16 @@ public class QueryStorge {
 		System.out.println("begin output...");
 		
 		try {
-			while(result.hasNext()) {
+			while (result.hasNext()) {
 				BindingSet bs = result.next();
+
+				for (String bindingName : bs.getBindingNames()) {
+					bufferedWriter.write(bs.getBinding(bindingName).toString() + " ");
+				}
+
+				bufferedWriter.write("\n");
 				
-				
-					for(String bindingName : bs.getBindingNames()) {
-						bufferedWriter.write(bs.getBinding(bindingName).toString() + " ");
-					}
-					
-					bufferedWriter.write("\n");
+				bufferedWriter.flush();
 			}
 		} catch (QueryEvaluationException e) {
 			// TODO Auto-generated catch block

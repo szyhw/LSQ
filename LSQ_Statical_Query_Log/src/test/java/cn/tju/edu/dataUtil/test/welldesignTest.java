@@ -17,15 +17,15 @@ public class welldesignTest {
 	
 	@Test
 	public void a_testGetSource() {
-		String queryString = "PREFIX lsqv:<http://lsq.aksw.org/vocab#> PREFIX sp:<http://spinrdf.org/sp#> SELECT ?text WHERE {  ?id lsqv:usesFeature lsqv:Filter . ?id sp:text ?text. FILTER NOT EXISTS{ ?id lsqv:usesFeature lsqv:Union }}limit 1000";
+		String queryString = "PREFIX lsqv:<http://lsq.aksw.org/vocab#> PREFIX sp:<http://spinrdf.org/sp#> SELECT ?text WHERE {  ?id lsqv:triplePatterns ?triples. ?id sp:text ?text }";
 		
-		query.QueryToFile(queryString, "/home/hanxingwang/Data/SearchResult/FilterQueryText");
+		query.QueryToFile(queryString, "/home/hanxingwang/Data/SearchResult/QueryText");
 	}
 	
 	@Test
 	public void b_testWellDesign() {
 		String sparqlString = null;
-		String filePath = "/home/hanxingwang/Data/SearchResult/FilterQueryText";
+		String filePath = "/home/hanxingwang/Data/SearchResult/QueryText";
 		FileReader fileReader = null;
 		BufferedReader bufferedReader = null;
 		
@@ -37,7 +37,8 @@ public class welldesignTest {
 			while ((sparqlString = bufferedReader.readLine()) != null) {
 				begin = sparqlString.indexOf('\"');
 				end = sparqlString.lastIndexOf('\"');
-				WelldesignUtil.isWelldesign(sparqlString.substring(begin+1, end));
+				if(begin < end)
+					WelldesignUtil.isWelldesign(sparqlString.substring(begin+1, end));
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
