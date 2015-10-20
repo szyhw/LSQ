@@ -4,8 +4,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import cn.tju.edu.Query.QueryStorge;
-import cn.tju.edu.dataUtil.Storge;
+import cn.edu.tju.dataextraction.QueryStorge;
+import cn.edu.tju.dataextraction.Storge;
 
 @FixMethodOrder(MethodSorters.DEFAULT)
 public class StorgeAndQueryTest {

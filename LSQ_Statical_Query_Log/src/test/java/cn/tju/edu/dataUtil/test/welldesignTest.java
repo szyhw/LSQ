@@ -6,10 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import org.junit.Test;
-
-import cn.tju.edu.Query.QueryStorge;
-import cn.tju.edu.dataUtil.Storge;
-import cn.tju.edu.dataUtil.WelldesignUtil;
+import cn.tju.edu.Query.*;
 
 public class welldesignTest {
 	private static Storge storge = new Storge("/home/hanxingwang/Data/SesameStorage");

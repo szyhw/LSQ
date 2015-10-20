@@ -1,8 +1,9 @@
 package cn.tju.edu.util.test;
 
-import cn.tju.edu.Query.QueryStorge;
-import cn.tju.edu.dataUtil.Storge;
+import cn.edu.tju.dataextraction.QueryStorge;
+import cn.edu.tju.dataextraction.Storge;
 import cn.tju.edu.util.StaticalUtil;
+
 import org.junit.Test;
 
 public class StaticalUtilTest {

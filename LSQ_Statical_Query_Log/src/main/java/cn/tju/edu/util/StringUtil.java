@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import cn.edu.tju.dataextraction.FileUtil;
+
 public class StringUtil {
 	
 	public static void replace(String replacement, String regex, String sourFile, String destFile) {
