@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 
-import cm.edu.tju.select.OptSearch;
 import cn.edu.tju.divideclass.Andopt;
 import cn.edu.tju.divideclass.ConvertFormSymbole;
 import cn.edu.tju.divideclass.MoreOpt;
@@ -21,6 +20,7 @@ import cn.edu.tju.moreopt.AddSymbol;
 import cn.edu.tju.moreopt.OperateSet;
 import cn.edu.tju.moreopt.Variable;
 import cn.edu.tju.moreopt.WellDesign;
+import cn.edu.tju.select.OptSearch;
 import cn.edu.tju.specialform.DivideByOpt;
 import cn.edu.tju.specialform.WellDesign_Special;
 
